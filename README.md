@@ -1,4 +1,4 @@
-# tahara-system
+# Tahara App
 
 ## Project setup
 ```
