@@ -11,46 +11,54 @@
                     <label>שם פרטי</label>
                     <md-input v-model="name" @input="saveName" :placeholder="name"></md-input>
                 </md-field>
-            <div id="lastOna">
-                <p class="ona-time-title">זמן העונה האחרונה</p>
-                <md-radio @change="updateOna" v-model="lastOna" value="day">יום</md-radio>
-                <md-radio @change="updateOna" v-model="lastOna" value="night">לילה</md-radio>
-            </div>
-            <div v-if="lastOna">
-                <md-field>
-                    <md-select placeholder="יום" v-model="lastDay" @input="updateDates(1, 'patchLast')">
-                        <md-option
-                                :value="key"
-                                v-for="(day, key) in dates.day"
-                                :key="day"
-                                v-show="key > beforeLastDateDay && key <= todayHebDay && key !== 30 && !lamedExists
-                                || lamedExists && key <= todayHebDay && key > beforeLastDateDay"
-                        >{{day}}
-                        </md-option>
-                    </md-select>
-                    <md-select placeholder="חודש" v-model="lastMonth" @input="updateDates(1, 'patchLast')">
-                        <md-option :value="key" v-for="(month, key) in dates.month" :key="month">{{month}}</md-option>
-                    </md-select>
-                    <md-select placeholder="שנה" v-model="lastYear" @input="updateDates(1, 'patchLast')">
-                        <md-option :value="key" v-for="(year, key) in dates.year" :key="year">{{year}}</md-option>
-                    </md-select>
-                </md-field>
-            </div>
-            <div v-if="lastDay && lastMonth && lastYear">
-                <p class="ona-time-title">זמן העונה לפני אחרונה</p>
-                <md-field>
-                    <md-select placeholder="יום" v-model="beforeDay" @input="updateDates(2, 'patchBeforeLast')">
-                        <md-option :value="key" v-for="(day, key) in dates.day" :key="day"
-                          v-show="key != 30 && !lamedExists && key < lastDateDay || lamedExists">{{day}}</md-option>
-                    </md-select>
-                    <md-select placeholder="חודש" v-model="beforeMonth" @input="updateDates(2, 'patchBeforeLast')">
-                        <md-option :value="key" v-for="(month, key) in dates.month" :key="month">{{month}}</md-option>
-                    </md-select>
-                    <md-select placeholder="שנה" v-model="beforeYear" @input="updateDates(2, 'patchBeforeLast')">
-                        <md-option :value="key" v-for="(year, key) in dates.year" :key="year">{{year}}</md-option>
-                    </md-select>
-                </md-field>
-            </div>
+                <div id="lastOna">
+                    <p class="ona-time-title">זמן העונה האחרונה</p>
+                    <md-radio @change="updateOna" v-model="lastOna" value="day">יום</md-radio>
+                    <md-radio @change="updateOna" v-model="lastOna" value="night">לילה</md-radio>
+                </div>
+                <div v-if="lastOna">
+                    <md-field>
+                        <md-select placeholder="יום" v-model="lastDay" @input="updateDates(1, 'patchLast')">
+                            <md-option
+                                    :value="key"
+                                    v-for="(day, key) in dates.day"
+                                    :key="day"
+                                    v-show="key > beforeLastDateDay && key <= todayHebDay && key !== 30 && !lastLamedExists
+                                || lastLamedExists && key <= todayHebDay && key > beforeLastDateDay
+                                || lastMonth !== beforeMonth && key <= todayHebDay && key !== 30 && !lastLamedExists"
+                            >{{day}}
+                            </md-option>
+                        </md-select>
+                        <md-select placeholder="חודש" v-model="lastMonth" @input="updateDates(1, 'patchLast')">
+                            <md-option :value="key" v-for="(month, key) in dates.month" :key="month">{{month}}
+                            </md-option>
+                        </md-select>
+                        <md-select placeholder="שנה" v-model="lastYear" @input="updateDates(1, 'patchLast')">
+                            <md-option :value="key" v-for="(year, key) in dates.year" :key="year">{{year}}</md-option>
+                        </md-select>
+                    </md-field>
+                </div>
+                <div v-if="lastDay && lastMonth && lastYear">
+                    <p class="ona-time-title">זמן העונה לפני אחרונה</p>
+                    <md-field>
+                        <md-select placeholder="יום" v-model="beforeDay" @input="updateDates(2, 'patchBeforeLast')">
+                            <md-option :value="key" v-for="(day, key) in dates.day" :key="day"
+                                       v-show="key != 30 && !beforeLastLamedExists && key < lastDateDay
+                          || beforeLastLamedExists && key < lastDateDay
+                          || lastMonth !== beforeMonth && key !=30 && !beforeLastLamedExists
+                          || beforeLastLamedExists && lastMonth !== beforeMonth
+                            ">{{day}}
+                            </md-option>
+                        </md-select>
+                        <md-select placeholder="חודש" v-model="beforeMonth" @input="updateDates(2, 'patchBeforeLast')">
+                            <md-option :value="key" v-for="(month, key) in dates.month" :key="month">{{month}}
+                            </md-option>
+                        </md-select>
+                        <md-select placeholder="שנה" v-model="beforeYear" @input="updateDates(2, 'patchBeforeLast')">
+                            <md-option :value="key" v-for="(year, key) in dates.year" :key="year">{{year}}</md-option>
+                        </md-select>
+                    </md-field>
+                </div>
                 <Loader v-if="loading"></Loader>
             </div>
         </div>
@@ -80,7 +88,8 @@
             enLastDate: null,
             enBeforeLastDate: null,
             lastOna: undefined,
-            lamedExists: new Hebcal.Month(new Hebcal.HDate().month, new Hebcal.HDate().year).length !== 29,
+            lastLamedExists: null,
+            beforeLastLamedExists: null,
             todayHebDay: new Hebcal.HDate().getDate(),
             lastDateDay: null,
             beforeLastDateDay: null
@@ -99,17 +108,18 @@
                 });
             },
             async updateOna() {
-               this.loading = true;
-               await api.updateData(this.lastOna, 'lastOna');
-               this.loading = false;
+                this.loading = true;
+                await api.updateData(this.lastOna, 'lastOna');
+                this.loading = false;
             },
             async updateDates(location, key) {
                 this.loading = true;
                 let date;
                 if (this.lastDay && this.lastMonth && this.lastYear && location === 1) {
                     date = new Hebcal.HDate(this.lastDay, this.lastMonth, this.lastYear);
-                    if (this.lastDate !== date.toString('h') && this.lastDate > this.beforeLastDate){
-                    await script.calculateOnPatch(date, this.lastOna, location, key);
+                    if (this.lastDate !== date.toString('h')) {
+                        await script.calculateOnPatch(date, this.lastOna, location, key);
+                        this.successMsg('תאריך עודכן בהצלחה')
                     } else if (this.lastDate == date.toString('h')) {
                         this.errorMsg('נא לבחור תאריך שונה מאותו תאריך');
                     }
@@ -125,8 +135,13 @@
             errorMsg(message) {
                 this.$toasted.global.err({
                     message: message,
-                })
-        }
+                });
+            },
+            successMsg(message) {
+                this.$toasted.global.success({
+                    message: message,
+                });
+            }
         },
         props: ['close'],
         created() {
@@ -137,9 +152,9 @@
                     this.name = window.user.displayName;
                     self.$emit('hasData');
                     if (response.lastOna) {
-                            response.lastOna === 'day'
-                                ? this.lastOna = 'day' :
-                                this.lastOna = 'night';
+                        response.lastOna === 'day'
+                            ? this.lastOna = 'day' :
+                            this.lastOna = 'night';
                     }
                     if (response.lastPeriods) {
                         if (response.lastPeriods.length >= 1) {
@@ -148,9 +163,9 @@
                             this.lastMonth = Hebcal.HDate(lastDate).getMonthName();
                             this.lastYear = JSON.stringify(lastDate.year);
                             this.lastDate = lastDate.toString('h');
-                            this.lastDateDay = lastDate.getDate()
+                            this.lastDateDay = lastDate.getDate();
                             this.enLastDate = script.enConvert(lastDate);
-
+                            this.lastLamedExists = new Hebcal.Month(this.lastMonth, JSON.parse(this.lastYear)).length !== 29;
                         }
                         if (response.lastPeriods.length > 1) {
                             const beforeLastDate = new Hebcal.HDate(response.lastPeriods[response.lastPeriods.length - 2]);
@@ -158,7 +173,8 @@
                             this.beforeMonth = Hebcal.HDate(beforeLastDate).getMonthName();
                             this.beforeYear = JSON.stringify(beforeLastDate.year);
                             this.enBeforeLastDate = script.enConvert(beforeLastDate);
-                            this.beforeLastDateDay = beforeLastDate.getDate()
+                            this.beforeLastDateDay = beforeLastDate.getDate();
+                            this.beforeLastLamedExists = new Hebcal.Month(this.beforeMonth, JSON.parse(this.beforeYear)).length !== 29;
                         }
                     }
                 });
