@@ -28,7 +28,7 @@ Vue.toasted.register('err',
     }, {
         type : 'error',
         icon : 'error_outline',
-        duration: 1000,
+        duration: 2000,
         closeOnSwipe: true,
         singleton: true,
     })
@@ -38,7 +38,7 @@ Vue.toasted.register('success',
     }, {
         type : 'success',
         icon : 'check_circle',
-        duration: 1000,
+        duration: 2000,
         closeOnSwipe: true,
         className: 'pinkBack',
         singleton: true,

@@ -18,25 +18,25 @@
             </div>
             <div v-if="lastOna">
                 <md-field>
-                    <md-select placeholder="יום" v-model="day" @input="updateDates(1, 'patchLast')">
+                    <md-select placeholder="יום" v-model="lastDay" @input="updateDates(1, 'patchLast')">
                         <md-option
                                 :value="key"
                                 v-for="(day, key) in dates.day"
                                 :key="day"
-                                v-show="key <= todayHebDay && key !== 30 && !lamedExists || lamedExists && key <= todayHebDay"
-                        >
-                            {{day}}
+                                v-show="key > beforeLastDateDay && key <= todayHebDay && key !== 30 && !lamedExists
+                                || lamedExists && key <= todayHebDay && key > beforeLastDateDay"
+                        >{{day}}
                         </md-option>
                     </md-select>
-                    <md-select placeholder="חודש" v-model="month" @input="updateDates(1, 'patchLast')">
+                    <md-select placeholder="חודש" v-model="lastMonth" @input="updateDates(1, 'patchLast')">
                         <md-option :value="key" v-for="(month, key) in dates.month" :key="month">{{month}}</md-option>
                     </md-select>
-                    <md-select placeholder="שנה" v-model="year" @input="updateDates(1, 'patchLast')">
+                    <md-select placeholder="שנה" v-model="lastYear" @input="updateDates(1, 'patchLast')">
                         <md-option :value="key" v-for="(year, key) in dates.year" :key="year">{{year}}</md-option>
                     </md-select>
                 </md-field>
             </div>
-            <div v-if="day && month && year">
+            <div v-if="lastDay && lastMonth && lastYear">
                 <p class="ona-time-title">זמן העונה לפני אחרונה</p>
                 <md-field>
                     <md-select placeholder="יום" v-model="beforeDay" @input="updateDates(2, 'patchBeforeLast')">
@@ -51,7 +51,7 @@
                     </md-select>
                 </md-field>
             </div>
-                <Loader v-if="typing"></Loader>
+                <Loader v-if="loading"></Loader>
             </div>
         </div>
     </div>
@@ -68,22 +68,22 @@
         data: () => ({
             dates: savedDates,
             name: '',
-            typing: null,
+            loading: null,
             hasData: null,
             lastDate: null,
-            day: null,
-            month: null,
-            year: null,
+            lastDay: null,
+            lastMonth: null,
+            lastYear: null,
             beforeDay: null,
             beforeMonth: null,
             beforeYear: null,
             enLastDate: null,
             enBeforeLastDate: null,
             lastOna: undefined,
-            lamedExists: new Hebcal.Month(new Hebcal.HDate().month, new Hebcal.HDate().year).length === 29 ?
-                        false : true,
+            lamedExists: new Hebcal.Month(new Hebcal.HDate().month, new Hebcal.HDate().year).length !== 29,
             todayHebDay: new Hebcal.HDate().getDate(),
-            lastDateDay: null
+            lastDateDay: null,
+            beforeLastDateDay: null
         }),
         components: {
             savedDates,
@@ -106,10 +106,12 @@
             async updateDates(location, key) {
                 this.loading = true;
                 let date;
-                if (this.day && this.month && this.year && location === 1) {
-                    date = new Hebcal.HDate(this.day, this.month, this.year);
-                    if (this.lastDate !== date.toString('h')){
+                if (this.lastDay && this.lastMonth && this.lastYear && location === 1) {
+                    date = new Hebcal.HDate(this.lastDay, this.lastMonth, this.lastYear);
+                    if (this.lastDate !== date.toString('h') && this.lastDate > this.beforeLastDate){
                     await script.calculateOnPatch(date, this.lastOna, location, key);
+                    } else if (this.lastDate == date.toString('h')) {
+                        this.errorMsg('נא לבחור תאריך שונה מאותו תאריך');
                     }
                     return this.loading = false;
                 }
@@ -120,6 +122,11 @@
                 }
                 this.loading = false;
             },
+            errorMsg(message) {
+                this.$toasted.global.err({
+                    message: message,
+                })
+        }
         },
         props: ['close'],
         created() {
@@ -137,9 +144,9 @@
                     if (response.lastPeriods) {
                         if (response.lastPeriods.length >= 1) {
                             const lastDate = new Hebcal.HDate(response.lastPeriods[response.lastPeriods.length - 1]);
-                            this.day = lastDate.day;
-                            this.month = Hebcal.HDate(lastDate).getMonthName();
-                            this.year = lastDate.year;
+                            this.lastDay = JSON.stringify(lastDate.day);
+                            this.lastMonth = Hebcal.HDate(lastDate).getMonthName();
+                            this.lastYear = JSON.stringify(lastDate.year);
                             this.lastDate = lastDate.toString('h');
                             this.lastDateDay = lastDate.getDate()
                             this.enLastDate = script.enConvert(lastDate);
@@ -147,10 +154,11 @@
                         }
                         if (response.lastPeriods.length > 1) {
                             const beforeLastDate = new Hebcal.HDate(response.lastPeriods[response.lastPeriods.length - 2]);
-                            this.beforeDay = beforeLastDate.day;
+                            this.beforeDay = JSON.stringify(beforeLastDate.day);
                             this.beforeMonth = Hebcal.HDate(beforeLastDate).getMonthName();
-                            this.beforeYear = beforeLastDate.year;
+                            this.beforeYear = JSON.stringify(beforeLastDate.year);
                             this.enBeforeLastDate = script.enConvert(beforeLastDate);
+                            this.beforeLastDateDay = beforeLastDate.getDate()
                         }
                     }
                 });
