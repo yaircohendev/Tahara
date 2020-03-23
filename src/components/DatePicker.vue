@@ -23,7 +23,8 @@
                                 :value="key"
                                 v-for="(day, key) in dates.day"
                                 :key="day"
-                                v-if="key != 30 && !lamedExists && key <= todayHebDay || lamedExists && key <= todayHebDay">
+                                v-show="key <= todayHebDay && key !== 30 && !lamedExists || lamedExists && key <= todayHebDay"
+                        >
                             {{day}}
                         </md-option>
                     </md-select>
@@ -40,7 +41,7 @@
                 <md-field>
                     <md-select placeholder="יום" v-model="beforeDay" @input="updateDates(2, 'patchBeforeLast')">
                         <md-option :value="key" v-for="(day, key) in dates.day" :key="day"
-                          v-if="key != 30 && !lamedExists && key < lastDateDay || lamedExists">{{day}}</md-option>
+                          v-show="key != 30 && !lamedExists && key < lastDateDay || lamedExists">{{day}}</md-option>
                     </md-select>
                     <md-select placeholder="חודש" v-model="beforeMonth" @input="updateDates(2, 'patchBeforeLast')">
                         <md-option :value="key" v-for="(month, key) in dates.month" :key="month">{{month}}</md-option>
