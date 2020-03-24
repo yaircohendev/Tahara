@@ -128,6 +128,10 @@
                 }
                 if (this.beforeDay && this.beforeMonth && this.beforeYear && location === 2) {
                     date = new Hebcal.HDate(this.beforeDay, this.beforeMonth, this.beforeYear);
+                    if (this.lastDate === date.toString('h')){
+                        this.loading = false;
+                        return this.errorMsg('תאריך לא יכול להיות זהה');
+                    }
                     await script.calculateOnPatch(date, this.lastOna, location, key);
                     return this.loading = false;
                 }
@@ -152,6 +156,7 @@
                     this.hasData = true;
                     this.name = window.user.displayName;
                     self.$emit('hasData');
+                    if (response){
                     if (response.lastOna) {
                         response.lastOna === 'day'
                             ? this.lastOna = 'day' :
@@ -178,6 +183,7 @@
                             this.beforeLastLamedExists = new Hebcal.Month(this.beforeMonth, JSON.parse(this.beforeYear)).length !== 29;
                         }
                     }
+                }
                 });
         },
     };
