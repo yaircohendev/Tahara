@@ -119,6 +119,7 @@
                     date = new Hebcal.HDate(this.lastDay, this.lastMonth, this.lastYear);
                     if (this.lastDate !== date.toString('h')) {
                         await script.calculateOnPatch(date, this.lastOna, location, key);
+                        this.lastDate = date.toString('h');
                         this.successMsg('תאריך עודכן בהצלחה')
                     } else if (this.lastDate == date.toString('h')) {
                         this.errorMsg('נא לבחור תאריך שונה מאותו תאריך');

@@ -68,7 +68,7 @@
                 self = this;
                 fireBaseInstance.firebase.auth().signOut()
                     .then(() => {
-                        this.$router.push('/login');
+                        self.$router.push('/login');
                     }).catch(function (error) {
                     self.$toasted.global.err({
                         message: 'בעייה התרחשה, אנא נסי שוב.',
