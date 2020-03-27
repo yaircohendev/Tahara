@@ -23,9 +23,12 @@
                                     :value="key"
                                     v-for="(day, key) in dates.day"
                                     :key="day"
-                                    v-show="key > beforeLastDateDay && key <= todayHebDay && key !== 30 && !lastLamedExists
-                                || lastLamedExists && key <= todayHebDay && key > beforeLastDateDay
-                                || lastMonth !== beforeMonth && key <= todayHebDay && key !== 30 && !lastLamedExists"
+                                    v-show=
+                                "key > beforeLastDateDay && key <= todayHebDay && key != 30 && !lastLamedExists
+                                || lastMonth !== beforeMonth && key <= todayHebDay && key != 30 && !lastLamedExists
+                                || todayHebMonth !== lastMonth && key != 30 && !lastLamedExists
+                                || lastLamedExists && key <= todayHebDay && todayHebMonth == lastMonth
+                                || lastLamedExists && todayHebMonth != lastMonth"
                             >{{day}}
                             </md-option>
                         </md-select>
@@ -43,10 +46,11 @@
                     <md-field>
                         <md-select placeholder="יום" v-model="beforeDay" @input="updateDates(2, 'patchBeforeLast')">
                             <md-option :value="key" v-for="(day, key) in dates.day" :key="day"
-                                       v-show="key != 30 && !beforeLastLamedExists && key < lastDateDay
-                          || beforeLastLamedExists && key < lastDateDay
+                                       v-show=
+                          "key != 30 && !beforeLastLamedExists && key < lastDateDay
                           || lastMonth !== beforeMonth && key !=30 && !beforeLastLamedExists
                           || beforeLastLamedExists && lastMonth !== beforeMonth
+                          || beforeLastLamedExists && key < lastDateDay
                             ">{{day}}
                             </md-option>
                         </md-select>
@@ -91,8 +95,9 @@
             lastLamedExists: null,
             beforeLastLamedExists: null,
             todayHebDay: new Hebcal.HDate().getDate(),
+            todayHebMonth: null,
             lastDateDay: null,
-            beforeLastDateDay: null
+            beforeLastDateDay: null,
         }),
         components: {
             savedDates,
@@ -100,11 +105,11 @@
         },
         methods: {
             saveName() {
-                this.typing = true;
+                this.loading = true;
                 window.user.updateProfile({
                     displayName: this.name
                 }).then(() => {
-                    this.typing = false;
+                    this.loading = false;
                 });
             },
             async updateOna() {
@@ -155,6 +160,7 @@
                 .then(response => {
                     this.hasData = true;
                     this.name = window.user.displayName;
+                    this.todayHebMonth = new Hebcal.HDate().getMonthName();
                     self.$emit('hasData');
                     if (response){
                     if (response.lastOna) {
