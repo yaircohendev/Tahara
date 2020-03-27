@@ -10,7 +10,7 @@
                         <md-input v-model="email" placeholder="אימייל" style="direction: ltr"></md-input>
                     </md-field>
                     <md-field>
-                        <md-input type="password" autocomplete="on" v-model="password" placeholder="סיסמה"></md-input>
+                        <md-input style="direction: ltr" type="password" autocomplete="on" v-model="password" placeholder="סיסמה"></md-input>
                     </md-field>
                     <md-button type="submit" class="md-raised md-primary">התחברות</md-button>
                 </form>
