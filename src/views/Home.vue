@@ -37,10 +37,6 @@
             <p style="text-align: center; margin-top: 10px; font-size: 15px; font-style: italic">
                 {{sentences[randomSent]}}</p>
         </div>
-        <div id="test" style="position: absolute; bottom: 15%;">
-                <p>שימי לב. האפליקציה עדיין בשלב ניסיוני. יש לבדוק את התאריכים ידנית עד סיום הניסיון. (אנחנו נודיע מתי). להצעות ושיפורים ניתן לפנות למפתח הראשי בוואטסאפ - 053-928-0883</p>
-            </div>
-        <div>
         </div>
         <div>
             <Tour></Tour>

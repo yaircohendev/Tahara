@@ -29,17 +29,17 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('../views/Login.vue')
+    component: () => import('../views/Closed.vue')
   },
   {
     path: '/sign-up',
     name: 'sign-up',
-    component: () => import('../views/Sign-Up.vue')
+    component: () => import('../views/Closed.vue')
   },
   {
     path: '/forgot',
     name: 'forgot-password',
-    component: () => import('../views/Forgot.vue')
+    component: () => import('../views/Closed.vue')
   },
   {
     path: '/settings',
@@ -63,6 +63,14 @@ const routes = [
     component: () => import('../views/Reminders.vue'),
     meta: {
       requiresAuth: true
+    }
+  },
+  {
+    path: '/secret',
+    name: 'secret',
+    component: () => import('../views/Login.vue'),
+    meta: {
+      requiresAuth: false
     }
   }
 ]

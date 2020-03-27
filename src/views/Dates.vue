@@ -8,7 +8,7 @@
             <div id="lastDates">
                 <p>תאריך הוסת האחרון שלך: {{lastDate}} ({{lastDateEn}})</p>
                 <p>תאריך הוסת לפני אחרון: {{beforeLastDate}} ({{beforeLastDateEn}})</p>
-                <p>הפרש בין וסתות: {{diffInDays}} ימים</p>
+                <p>הפרש בין וסתות: {{diffInDays}}</p>
             </div>
             <p class="no-margin">תאריך הפרישה הוא ב{{onaHe}}</p>
             <div id="benonit">
@@ -101,7 +101,7 @@
                         this.haflagaEn = this.englishToHeb(this.haflagaHeb);
                     }
                     if (response.lastOna) {
-                        const thisOna = response.lastOna[response.lastOna.length - 1];
+                        const thisOna = response.lastOna;
                         thisOna === 'day' ? this.onaHe = 'יום' : this.onaHe = 'לילה (אור ל)';
                     }
                     this.hasData = true;
