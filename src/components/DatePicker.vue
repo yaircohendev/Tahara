@@ -115,6 +115,7 @@
             async updateOna() {
                 this.loading = true;
                 await api.updateData(this.lastOna, 'lastOna');
+                this.successMsg('עונה עודכנה בהצלחה')
                 this.loading = false;
             },
             async updateDates(location, key) {
@@ -145,6 +146,7 @@
                         this.loading = false;
                         return this.errorMsg('תאריך לא יכול להיות זהה');
                     }
+                    this.successMsg('תאריך עודכן בהצלחה')
                     await script.calculateOnPatch(date, this.lastOna, location, key);
                     return this.loading = false;
                 }
