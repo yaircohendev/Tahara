@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '*',
-    redirect: '/closed'
+    redirect: '/login'
   },
   {
     path: '/home',
@@ -29,17 +29,17 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('../views/Closed.vue')
+    component: () => import('../views/Login.vue')
   },
   {
     path: '/sign-up',
     name: 'sign-up',
-    component: () => import('../views/Closed.vue')
+    component: () => import('../views/Sign-Up.vue')
   },
   {
     path: '/forgot',
     name: 'forgot-password',
-    component: () => import('../views/Closed.vue')
+    component: () => import('../views/Forgot.vue')
   },
   {
     path: '/settings',
