@@ -121,6 +121,10 @@
                 this.loading = true;
                 let date;
                 if (this.lastDay && this.lastMonth && this.lastYear && location === 1) {
+                    if (!this.dateVerification()){
+                        this.loading = false;
+                        return this.errorMsg('תאריך עונה אחרונה לא יכול להיות קטן יותר מעונה לפני אחרונה');
+                    }
                     date = new Hebcal.HDate(this.lastDay, this.lastMonth, this.lastYear);
                     if (this.lastDate !== date.toString('h')) {
                         await script.calculateOnPatch(date, this.lastOna, location, key);
@@ -132,6 +136,10 @@
                     return this.loading = false;
                 }
                 if (this.beforeDay && this.beforeMonth && this.beforeYear && location === 2) {
+                    if (!this.dateVerification()){
+                        this.loading = false;
+                        return this.errorMsg('תאריך עונה אחרונה לא יכול להיות קטן יותר מעונה לפני אחרונה');
+                    }
                     date = new Hebcal.HDate(this.beforeDay, this.beforeMonth, this.beforeYear);
                     if (this.lastDate === date.toString('h')){
                         this.loading = false;
@@ -141,6 +149,12 @@
                     return this.loading = false;
                 }
                 this.loading = false;
+            },
+            dateVerification(){
+                const lastDate = new Hebcal.HDate(this.lastDay, this.lastMonth, this.lastYear);
+                const beforeLastDate = new Hebcal.HDate(this.beforeDay, this.beforeMonth, this.beforeYear);
+                if (beforeLastDate.abs() > lastDate.abs()) return false;
+                return true;
             },
             errorMsg(message) {
                 this.$toasted.global.err({

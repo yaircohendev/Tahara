@@ -46,7 +46,7 @@ async function calculateTodayDate(onaTime, date) {
 async function calculateInMonth(date) { //Onat Hodesh
     let hebDate = new Hebcal.HDate(date);
     if (hebDate.month === 12) hebDate = new Hebcal.HDate(hebDate.day, 1, hebDate.year);
-    if (hebDate.month !== 12) hebDate.next();
+    if (hebDate.month !== 12) hebDate = new Hebcal.HDate(hebDate.day, hebDate.month + 1, hebDate.year);
     hebDate = new Hebcal.HDate(date.day, hebDate.month, hebDate.year);
     await api.updateData(hebDate.toString('h'), 'hebMonthOna');
 }
@@ -85,7 +85,6 @@ async function verifyDate(date, onaTime) {
 function enConvert(date){
     return new Hebcal.HDate(date).greg();
 }
-
 
 export default {
     calculateOnPush,

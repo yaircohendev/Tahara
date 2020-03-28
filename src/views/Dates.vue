@@ -10,16 +10,16 @@
                 <p>תאריך הוסת לפני אחרון: {{beforeLastDate}} ({{beforeLastDateEn}})</p>
                 <p>הפרש בין וסתות: {{diffInDays}}</p>
             </div>
-            <p class="no-margin">תאריך הפרישה הוא ב{{onaHe}}</p>
-            <div id="benonit">
-                <span>עונה בינונית</span>
-                <p v-if="switchStatus">{{in30DateHeb}}</p>
-                <p v-if="in30DateHeb != 'תאריך אינו זמין'">{{in30DateEn}}</p>
-            </div>
+            <p class="ona-display">תאריך הפרישה הוא ב{{onaHe}}</p>
             <div id="month">
                 <span>עונת החודש</span>
                 <p v-if="switchStatus">{{monthOnaHeb}}</p>
                 <p v-if="monthOnaHeb != 'תאריך אינו זמין'">{{monthOnaEn}}</p>
+            </div>
+            <div id="benonit">
+                <span>עונה בינונית</span>
+                <p v-if="switchStatus">{{in30DateHeb}}</p>
+                <p v-if="in30DateHeb != 'תאריך אינו זמין'">{{in30DateEn}}</p>
             </div>
             <div id="haflaga">
                 <span>עונת ההפלגה</span>
@@ -102,7 +102,7 @@
                     }
                     if (response.lastOna) {
                         const thisOna = response.lastOna;
-                        thisOna === 'day' ? this.onaHe = 'יום' : this.onaHe = 'לילה (אור ל)';
+                        thisOna === 'day' ? this.onaHe = 'יום ☀️' : this.onaHe = 'לילה (אור ל) 🌙';
                     }
                     this.hasData = true;
                 }).catch((err) => {
@@ -117,5 +117,8 @@
 <style lang="scss" scoped>
     span {
         font-weight: bold;
+    }
+    .ona-display{
+        margin: 0 0 1rem 0;
     }
 </style>
