@@ -6,6 +6,11 @@ module.exports = {
         themeColor: '#f54291',
         msTileColor: '#000000',
         backgroundColor: '#ffffff',
+        workboxPluginMode: 'InjectManifest',
+        workboxOptions: {
+            swSrc: './src/sw.js',
+            swDest: 'service-worker.js',
+        },
         manifestOptions: {
             icons: [
                 {

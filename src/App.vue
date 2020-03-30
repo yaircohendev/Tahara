@@ -12,6 +12,9 @@
             </md-app-drawer>
             <md-app-content>
                 <router-view id="router"/>
+                <div id="update-available" v-if="updateExists">
+                    <button @click="refreshApp">עידכון זמין - לחצי כאן בשביל לעדכן!</button>
+                </div>
             </md-app-content>
         </md-app>
         <footerComp></footerComp>
@@ -28,13 +31,39 @@
         },
         data: () => ({
             menuVisible: false,
-            user: window.user
+            user: window.user,
+            refreshing: false,
+            registration: null,
+            updateExists: false,
         }),
         watch: {
             '$route'() {
                 this.menuVisible = false;
             },
-        }
+        },
+        methods: {
+            refreshApp(){
+                this.updateExists = false;
+                if (!this.registration || !this.registration.waiting) { return; }
+                this.registration.waiting.postMessage('skipWaiting');
+            },
+            showRefreshUI (e) {
+                this.registration = e.detail;
+                this.updateExists = true;
+            },
+        },
+        created () {
+            document.addEventListener(
+                'swUpdated', this.showRefreshUI, { once: true }
+            );
+            navigator.serviceWorker.addEventListener(
+                'controllerchange', () => {
+                    if (this.refreshing) return;
+                    this.refreshing = true;
+                    window.location.reload();
+                }
+            );
+        },
     };
 </script>
 
@@ -148,6 +177,23 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+    }
+    #update-available{
+        position: fixed;
+        bottom: 0;
+        margin-bottom: 10rem;
+        button{
+            margin-top: .7rem;
+            margin-bottom: .7rem;
+            width: 22rem;
+            height: 3.5rem;
+            background-color: #f54291;
+            border-radius: 0.25rem;
+            font-size: 1.16rem;
+            color: #fff;
+            line-height: 1.25;
+            border: none;
+        }
     }
     /*.md-input, .md-field .md-textarea {*/
     /*    height: unset !important;*/
