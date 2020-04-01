@@ -75,6 +75,7 @@
         created() {
             api.getData()
                 .then(response => {
+                    if (!response) return this.hasData = true;
                     if (response.lastPeriods) {
                         if (response.lastPeriods.length >= 1) {
                             const lastDate = new Hebcal.HDate(response.lastPeriods[response.lastPeriods.length - 1]);
@@ -106,7 +107,7 @@
                     }
                     this.hasData = true;
                 }).catch((err) => {
-                alert(err);
+                console.log(err);
             });
         },
         components: {
