@@ -21,7 +21,7 @@ async function calculateOnPatch(date, onaTime, location, key) {
         await calculateIn30(date);
     }
     if (data.lastPeriods) {
-        if (data.lastPeriods.length > 1) {
+        if (key === 'patchBeforeLast' || data.lastPeriods.length > 1) {
             await calculateHaflaga();
         }
     }
