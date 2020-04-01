@@ -19,12 +19,10 @@ async function updateArrayData(data, ref) {
     try {
         const oldData = await getData();
         const updateRef = fb.firebase.database().ref(`users/${window.user.uid}/data/${ref}`);
-        if (!oldData[ref]) {
-            await updateRef.set([data]);
-        } else {
-            const newArr = oldData[ref].concat(data); // Update the array last date, using push-like update
-            await updateRef.set(newArr);
-        }
+        if (!oldData) return await updateRef.set([data]);
+        if (!oldData[ref]) return await updateRef.set([data]);
+        const newArr = oldData[ref].concat(data); // Update the array last date, using push-like update
+        await updateRef.set(newArr);
     } catch (err) {
         console.log(err);
     }

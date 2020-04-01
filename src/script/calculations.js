@@ -6,9 +6,11 @@ async function calculateOnPush(date, onaTime) {
     const todayDate = await calculateTodayDate(onaTime, date);
     await calculateInMonth(todayDate);
     await calculateIn30(todayDate);
-    if (data.lastPeriods) {
-        if (data.lastPeriods.length >= 1) {
-            await calculateHaflaga(data.lastPeriods[data.lastPeriods.length - 1], todayDate);
+    if (data) {
+        if (data.lastPeriods) {
+            if (data.lastPeriods.length >= 1) {
+                await calculateHaflaga(data.lastPeriods[data.lastPeriods.length - 1], todayDate);
+            }
         }
     }
 }
@@ -60,7 +62,7 @@ async function calculateIn30(date) { // Ona Benonit
 
 async function calculateHaflaga(beforeDate, thisDate) {
     const data = await api.getData();
-    if (!thisDate) thisDate = new Hebcal.HDate(data.lastPeriods[data.lastPeriods.length - 1])
+    if (!thisDate) thisDate = new Hebcal.HDate(data.lastPeriods[data.lastPeriods.length - 1]);
     beforeDate = new Hebcal.HDate(data.lastPeriods[data.lastPeriods.length - 2]);
     let diff = thisDate.abs() - beforeDate.abs();
     thisDate = new Hebcal.HDate(thisDate.abs() + diff);
@@ -71,6 +73,7 @@ async function calculateHaflaga(beforeDate, thisDate) {
 
 async function verifyDate(date, onaTime) {
     const data = await api.getData();
+    if (!data) return false;
     if (!data.lastPeriods) return false;
     const oldDate = data.lastPeriods[data.lastPeriods.length - 1];
     const dateToCheck = calculateHebDateWithOna(onaTime, date);
@@ -81,7 +84,7 @@ async function verifyDate(date, onaTime) {
     }
 }
 
-function enConvert(date){
+function enConvert(date) {
     return new Hebcal.HDate(date).greg();
 }
 
