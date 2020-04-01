@@ -122,9 +122,11 @@
                 this.loading = true;
                 let date;
                 if (this.lastDay && this.lastMonth && this.lastYear && location === 1) {
+                    if (this.beforeDay && this.beforeMonth && this.beforeYear){
                     if (!this.dateVerification()){
                         this.loading = false;
                         return this.errorMsg('תאריך עונה אחרונה לא יכול להיות קטן יותר מעונה לפני אחרונה');
+                    }
                     }
                     date = new Hebcal.HDate(this.lastDay, this.lastMonth, this.lastYear);
                     if (this.lastDate !== date.toString('h')) {
