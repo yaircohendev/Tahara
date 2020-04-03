@@ -42,23 +42,10 @@ async function patchLastArrayData(ref, data, location){
     }
 }
 
-async function getVersionData(){
-    return fb.firebase.database().ref(`versions`).once('value')
-        .then(res => res.val())
-        .catch((err) => console.log(err));
-}
-
-export async function updateVersionFound(){
-    const versionData = await getVersionData();
-    let versionNumber = versionData.versionNumber;
-    await fb.firebase.database().ref(`versions`)
-        .update({versionNumber: versionNumber + 0.01});
-}
 
 export default {
     updateData,
     updateArrayData,
     getData,
-    patchLastArrayData,
-    updateVersionFound
+    patchLastArrayData
 };

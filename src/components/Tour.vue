@@ -1,5 +1,5 @@
 <template>
-    <v-tour name="myTour" :steps="steps">
+    <v-tour name="myTour" :steps="steps" :callbacks="myCallbacks">
         <template slot-scope="tour">
             <transition name="fade">
                 <v-step
@@ -20,13 +20,13 @@
                             <button @click="tour.nextStep" class="btn btn-primary v-step__button">צעד הבא</button>
                         </div>
                     </template>
-                    <template v-if="tour.currentStep >= 1 && tour.currentStep !== 3">
+                    <template v-if="tour.currentStep >= 1 && tour.currentStep !== 4">
                         <div slot="actions">
                             <button @click="tour.previousStep" class="btn btn-primary v-step__button">צעד קודם</button>
                             <button @click="tour.nextStep" class="btn btn-primary v-step__button">צעד הבא</button>
                         </div>
                     </template>
-                    <template v-if="tour.currentStep === 3">
+                    <template v-if="tour.currentStep === 4">
                         <div slot="actions">
                             <button @click="tour.previousStep" class="btn btn-primary v-step__button">צעד קודם</button>
                             <button @click="tour.stop" class="btn btn-primary v-step__button">סיום</button>
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+    import api from '../firebase/api';
+
     export default {
         name: "Tour",
         data: () => ({
@@ -55,15 +57,24 @@
                     content: 'לאחר מכן תלחצי על הכפתור, ותאריכי הפרישה שלך יתעדכנו בלשונית "תאריכים", למטה.'
                 },
                 {
-                    target: '.v-step-2',
+                    target: '[data-v-step="2"]',
                     content: 'זה הכל! כל חודש את יכולה לחזור, ללחוץ ביום קבלת הוסת על הכפתור, וכל תאריכי הפרישה יהיו מחושבים בשבילך!'
                 },
                 {
                     target: '[data-v-step="3"]',
                     content: 'במידה ושחכת ללחוץ על הכפתור באותו יום, תמיד תוכלי להכניס תאריך ידנית',
                 },
-            ]
-        })
+                {
+                    target: '[data-v-step="4"]',
+                    content: 'על מנת לחזור לסיור זה, ניתן ללחוץ על הסימן שאלה בכל זמן',
+                },
+            ],
+            myCallbacks: {
+                onStop: async function(){
+                    await api.updateData(true, 'finishedTour')
+                }
+            },
+        }),
     };
 </script>
 
