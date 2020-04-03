@@ -10,8 +10,7 @@ self.addEventListener('message', (e) => {
     }
 });
 
-workbox.core.clientsClaim(); // Vue CLI 4 and Workbox v4, else
-// workbox.clientsClaim(); // Vue CLI 3 and Workbox v3.
+workbox.core.clientsClaim();
 
 // The precaching code provided by Workbox.
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
