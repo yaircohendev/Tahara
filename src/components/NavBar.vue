@@ -26,6 +26,10 @@
                 <md-icon class="md-icon-right">account_box</md-icon>
                 <span class="md-list-item-text">הגדרות</span>
             </md-list-item>
+            <md-list-item  v-if="user" to="/contact">
+                <md-icon class="md-icon-right">message</md-icon>
+                <span class="md-list-item-text">יצירת קשר</span>
+            </md-list-item>
             <md-list-item @click="showDialog = true" v-if="user">
                 <md-icon class="md-icon-right">exit_to_app</md-icon>
                 <span class="md-list-item-text">התנתקי</span>

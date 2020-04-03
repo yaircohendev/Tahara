@@ -96,7 +96,6 @@
                 });
             },
             showGuide(){
-                console.log('yo')
                 this.$tours['myTour'].start()
             }
         },

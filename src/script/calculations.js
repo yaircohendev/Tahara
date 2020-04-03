@@ -88,14 +88,6 @@ function enConvert(date) {
     return new Hebcal.HDate(date).greg();
 }
 
-async function updateData(lastPeriod, onaTime, hebMonth, in30Ona){
-    const data = {
-        lastPeriod,
-        onaTime,
-        hebMonth,
-        in30Ona,
-    }
-}
 
 export default {
     calculateOnPush,
