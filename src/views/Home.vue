@@ -1,14 +1,14 @@
 <template>
     <div>
-      <div id="loader"><Loader v-if="!hasData"></Loader></div>
+      <div id="loader"><Loader v-show="!hasData"></Loader></div>
     <div id="main-page" v-if="hasData">
-        <div id="header" style="margin-top:5px;">
-            <md-button v-on:click="this.showGuide" class="md-icon-button icon-new">
+        <div id="header" style="margin-top:5px;" data-v-step="0">
+            <md-button v-on:click="this.showGuide" class="md-icon-button icon-new" data-v-step="4">
                 <md-icon>help</md-icon>
             </md-button>
             <h1 >ברוכה הבאה {{name}}</h1>
             </div>
-        <div id="check" data-v-step="0">
+        <div id="check">
             <div id="radio-before" v-if="radio">
             <md-radio v-model="radio" value="day">יום</md-radio>
             <md-radio v-model="radio" value="night">לילה</md-radio>
@@ -18,7 +18,7 @@
             <md-radio v-model="radio" value="night" disabled>לילה</md-radio>
             </div>
         </div>
-        <div id="btn" data-v-step="1" class="v-step-2" v-if="!loading">
+        <div id="btn" data-v-step="1" v-if="!loading">
             <md-button v-if="radio === 'default'" disabled class="md-raised md-primary got">קיבלתי וסת</md-button>
             <md-button v-if="radio == 'day' || radio == 'night'" @click="pushData" class="md-raised md-primary got">קיבלתי
                 וסת
@@ -38,15 +38,13 @@
                 {{sentences[randomSent]}}</p>
         </div>
         </div>
-        <div>
-            <Tour></Tour>
-        </div>
-    </div>
+        <div v-show="hasData"><Tour ></Tour></div>
     </div>
 </template>
 <script>
     import logic from '../script/calculations';
     import Tour from '../components/Tour'
+    import api from '../firebase/api';
 
     export default {
         name: 'Home',
@@ -62,7 +60,7 @@
             sentShow: true,
             clicked: false,
             loading: false,
-            finishedTour: false,
+            finishedTour: null,
         }),
         methods: {
             async pushData(){
@@ -98,7 +96,7 @@
                 });
             },
             showGuide(){
-               this.$tours['myTour'].start()
+                this.$tours['myTour'].start()
             }
         },
         components: {
@@ -110,12 +108,16 @@
                 return Math.floor(Math.random() * this.sentences.length);
             },
         },
-        created(){
+         async created(){
+            const data = await api.getData();
+            if (data){
+                if (data.finishedTour) this.finishedTour = true;
+            }
             this.hasData = true;
             this.name = window.user.displayName;
-        },
-        mounted() {
-            // this.$tours['myTour'].start()
+         },
+        updated() {
+            if (!this.finishedTour && this.hasData) this.showGuide()
         }
     };
 </script>
