@@ -50,14 +50,6 @@ const routes = [
     }
   },
   {
-    path: '/closed',
-    name: 'closed',
-    component: () => import('../views/Closed.vue'),
-    meta: {
-      requiresAuth: false,
-    }
-  },
-  {
     path: '/reminders',
     name: 'reminders',
     component: () => import('../views/Reminders.vue'),
@@ -66,11 +58,11 @@ const routes = [
     }
   },
   {
-    path: '/secret',
-    name: 'secret',
-    component: () => import('../views/Login.vue'),
+    path: '/contact',
+    name: 'contact',
+    component: () => import('../views/Contact.vue'),
     meta: {
-      requiresAuth: false
+      requiresAuth: true
     }
   }
 ]
