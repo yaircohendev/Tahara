@@ -41,7 +41,7 @@ function calculateHebDateWithOna(onaTime, date) {
 async function calculateTodayDate(onaTime, date) {
     const todayHebDate = calculateHebDateWithOna(onaTime, date);
     await api.updateArrayData(todayHebDate.toString('h'), 'lastPeriods');
-    await api.updateArrayData(onaTime, 'lastOna');
+    await api.updateData(onaTime, 'lastOna');
     return todayHebDate;
 }
 
@@ -86,6 +86,15 @@ async function verifyDate(date, onaTime) {
 
 function enConvert(date) {
     return new Hebcal.HDate(date).greg();
+}
+
+async function updateData(lastPeriod, onaTime, hebMonth, in30Ona){
+    const data = {
+        lastPeriod,
+        onaTime,
+        hebMonth,
+        in30Ona,
+    }
 }
 
 export default {

@@ -96,6 +96,7 @@
                 });
             },
             showGuide(){
+                console.log('yo')
                 this.$tours['myTour'].start()
             }
         },
@@ -114,10 +115,11 @@
                 if (data.finishedTour) this.finishedTour = true;
             }
             this.hasData = true;
+            if (!this.finishedTour) this.showGuide()
             this.name = window.user.displayName;
          },
-        updated() {
-            if (!this.finishedTour && this.hasData) this.showGuide()
+        mounted() {
+
         }
     };
 </script>
