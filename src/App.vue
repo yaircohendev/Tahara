@@ -13,7 +13,7 @@
             <md-app-content>
                 <router-view id="router"/>
                 <div id="update-available" v-if="updateExists">
-                    <button @click="refreshApp">עידכון זמין - לחצי כאן בשביל לעדכן!</button>
+                    <button @click="refreshApp">עידכון זמין - נא ללחוץ כאן בשביל לעדכן</button>
                 </div>
             </md-app-content>
         </md-app>
@@ -56,13 +56,13 @@
             document.addEventListener(
                 'swUpdated', this.showRefreshUI, { once: true }
             );
-            navigator.serviceWorker.addEventListener(
+            navigator.serviceWorker.addEventListener( // Updates with new version
                 'controllerchange', () => {
                     if (this.refreshing) return;
                     this.refreshing = true;
                     window.location.reload();
                 }
-            );
+            )
         },
     };
 </script>
