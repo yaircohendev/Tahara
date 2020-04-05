@@ -43,7 +43,6 @@ async function patchLastArrayData(ref, data, location){
 }
 
 
-
 export default {
     updateData,
     updateArrayData,

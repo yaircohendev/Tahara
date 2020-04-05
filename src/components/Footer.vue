@@ -5,7 +5,7 @@
                 <md-bottom-bar-item  v-if="!user"  to="/sign-up" exact md-label="הרשמה" md-icon="check_circle"></md-bottom-bar-item>
             <md-bottom-bar-item  v-if="user"  to="/home" exact md-label="ראשי" md-icon="check_circle"></md-bottom-bar-item>
             <md-bottom-bar-item  v-if="user"  to="/dates" md-label="תאריכים" md-icon="date_range"></md-bottom-bar-item>
-            <md-bottom-bar-item  v-if="user" disabled="true" to="/reminders" md-label="תזכורות" md-icon="alarm_on"></md-bottom-bar-item>
+            <md-bottom-bar-item  v-if="user"  :disabled="user.email === 'yair@cohen.com' ? false : true" to="/reminders" md-label="תזכורות" md-icon="alarm_on"></md-bottom-bar-item>
         </md-bottom-bar>
     </div>
 </template>

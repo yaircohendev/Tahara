@@ -14,6 +14,7 @@ import Toasted from 'vue-toasted';
 Vue.use(Toasted)
 import './registerServiceWorker'
 
+
 fireBaseInstance.firebase.auth().onAuthStateChanged((user) => {
     window.user = user;
     new Vue({
@@ -21,6 +22,7 @@ fireBaseInstance.firebase.auth().onAuthStateChanged((user) => {
       render: h => h(App)
     }).$mount('#app')
 })
+
 
 Vue.toasted.register('err',
     (payload) => {
