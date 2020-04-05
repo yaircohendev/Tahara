@@ -12,6 +12,7 @@ module.exports = {
             swDest: 'service-worker.js',
         },
         manifestOptions: {
+            gcm_sender_id: "103953800507",
             icons: [
                 {
                     src: "img/icons/android-chrome-192x192.png",
