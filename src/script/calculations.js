@@ -48,15 +48,13 @@ async function calculateTodayDate(onaTime, date) {
 async function calculateInMonth(date) { //Onat Hodesh
     let hebDate = new Hebcal.HDate(date);
     const monthLength = new Hebcal.Month(hebDate.month, hebDate.year).length;
-    hebDate = new Hebcal.HDate(hebDate.day + monthLength, hebDate.month, hebDate.year);
+    hebDate = new Hebcal.HDate(hebDate.abs() + monthLength);
     await api.updateData(hebDate.toString('h'), 'hebMonthOna');
 }
 
 async function calculateIn30(date) { // Ona Benonit
     let hebDate = new Hebcal.HDate(date);
-    hebDate.month === 12 ?
-        hebDate = new Hebcal.HDate(hebDate.day, 1, hebDate.year) :
-        hebDate = new Hebcal.HDate(hebDate.day + 29, hebDate.month, hebDate.year);
+    hebDate = new Hebcal.HDate(hebDate.abs() + 29);
     await api.updateData(hebDate.toString('h'), 'in30Ona');
 }
 
