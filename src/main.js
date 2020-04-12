@@ -14,7 +14,6 @@ import Toasted from 'vue-toasted';
 Vue.use(Toasted)
 import './registerServiceWorker'
 
-
 fireBaseInstance.firebase.auth().onAuthStateChanged((user) => {
     window.user = user;
     new Vue({

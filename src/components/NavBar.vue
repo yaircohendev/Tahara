@@ -14,7 +14,7 @@
                 <md-icon class="md-icon-right">alarm</md-icon>
                 <span class="md-list-item-text">תזכורות</span>
             </md-list-item>
-            <md-list-item v-if="user" :disabled="true">
+            <md-list-item to="/biotz" v-if="user" :disabled="user.email !== 'yair@cohen.com'">
                 <md-icon class="md-icon-right">assignment</md-icon>
                 <span class="md-list-item-text">מחשבון ביוץ</span>
             </md-list-item>

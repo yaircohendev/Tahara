@@ -42,10 +42,34 @@ async function patchLastArrayData(ref, data, location){
     }
 }
 
+async function subscribeToNotifications(data){
+    try{
+        const updateRef = fb.firebase.database().ref(`notifications/${window.user.uid}`);
+        await updateRef.update(data)
+    } catch(err){
+        console.error(err)
+    }
+}
+
+async function removeFromNotifications(){
+   await fb.firebase.database().ref(`notifications/${window.user.uid}`).remove();
+}
+
+async function updateNotificationStatus(data){
+    try {
+        const updateRef = fb.firebase.database().ref(`notifications/${window.user.uid}/`);
+        await updateRef.set(data);
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 export default {
     updateData,
     updateArrayData,
     getData,
     patchLastArrayData,
+    subscribeToNotifications,
+    removeFromNotifications,
+    updateNotificationStatus
 };

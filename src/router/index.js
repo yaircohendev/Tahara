@@ -58,6 +58,14 @@ const routes = [
     }
   },
   {
+    path: '/biotz',
+    name: 'biotz',
+    component: () => import('../views/Biotz.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/contact',
     name: 'contact',
     component: () => import('../views/Contact.vue'),

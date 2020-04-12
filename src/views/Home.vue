@@ -43,6 +43,7 @@
 </template>
 <script>
     import logic from '../script/calculations';
+    import functions from '../script/functions';
     import Tour from '../components/Tour'
     import api from '../firebase/api';
 
@@ -68,6 +69,7 @@
                 const verifyDate = await logic.verifyDate(new Date(), this.radio); // Checks if current date already submitted
                 if (!verifyDate) {
                     await logic.calculateOnPush(new Date(), this.radio);
+                    await functions.schedulePushNotifications();
                     this.successToast()
                     this.clicked = true;
                     this.radio = undefined;

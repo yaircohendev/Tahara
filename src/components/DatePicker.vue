@@ -24,7 +24,7 @@
                                     v-for="(day, key) in dates.day"
                                     :key="day"
                                     v-show=
-                                "key > beforeLastDateDay && key <= todayHebDay && key != 30 && !lastLamedExists
+                                            "key > beforeLastDateDay && key <= todayHebDay && key != 30 && !lastLamedExists
                                 || lastMonth !== beforeMonth && key <= todayHebDay && key != 30 && !lastLamedExists
                                 || todayHebMonth !== lastMonth && key != 30 && !lastLamedExists
                                 || lastLamedExists && key <= todayHebDay && todayHebMonth == lastMonth
@@ -47,7 +47,7 @@
                         <md-select placeholder="יום" v-model="beforeDay" @input="updateDates(2, 'patchBeforeLast')">
                             <md-option :value="key" v-for="(day, key) in dates.day" :key="day"
                                        v-show=
-                          "key != 30 && !beforeLastLamedExists && key < lastDateDay
+                                               "key != 30 && !beforeLastLamedExists && key < lastDateDay
                           || lastMonth !== beforeMonth && key !=30 && !beforeLastLamedExists
                           || beforeLastLamedExists && lastMonth !== beforeMonth
                           || beforeLastLamedExists && key < lastDateDay
@@ -75,6 +75,7 @@
     import api from "../firebase/api";
     import script from '../script/calculations';
     import Loader from './Loader';
+    import functions from "../script/functions";
 
     export default {
         data: () => ({
@@ -115,50 +116,51 @@
             async updateOna() {
                 this.loading = true;
                 await api.updateData(this.lastOna, 'lastOna');
-                this.successMsg('עונה עודכנה בהצלחה')
+                this.successMsg('עונה עודכנה בהצלחה');
                 this.loading = false;
             },
             async updateDates(location, key) {
                 this.loading = true;
                 let date;
                 if (this.lastDay && this.lastMonth && this.lastYear && location === 1) {
-                    if (this.beforeDay && this.beforeMonth && this.beforeYear){
-                    if (!this.dateVerification()){
-                        this.loading = false;
-                        return this.errorMsg('תאריך עונה אחרונה לא יכול להיות קטן יותר מעונה לפני אחרונה');
-                    }
+                    if (this.beforeDay && this.beforeMonth && this.beforeYear) {
+                        if (!this.dateVerification()) {
+                            this.loading = false;
+                            return this.errorMsg('תאריך עונה אחרונה לא יכול להיות קטן יותר מעונה לפני אחרונה');
+                        }
                     }
                     date = new Hebcal.HDate(this.lastDay, this.lastMonth, this.lastYear);
                     if (this.lastDate !== date.toString('h')) {
                         await script.calculateOnPatch(date, this.lastOna, location, key);
+                        await functions.schedulePushNotifications();
                         this.lastDate = date.toString('h');
-                        this.successMsg('תאריך עודכן בהצלחה')
+                        this.successMsg('תאריך עודכן בהצלחה');
                     } else if (this.lastDate == date.toString('h')) {
                         this.errorMsg('נא לבחור תאריך שונה מאותו תאריך');
                     }
                     return this.loading = false;
                 }
                 if (this.beforeDay && this.beforeMonth && this.beforeYear && location === 2) {
-                    if (!this.dateVerification()){
+                    if (!this.dateVerification()) {
                         this.loading = false;
                         return this.errorMsg('תאריך עונה אחרונה לא יכול להיות קטן יותר מעונה לפני אחרונה');
                     }
                     date = new Hebcal.HDate(this.beforeDay, this.beforeMonth, this.beforeYear);
-                    if (this.lastDate === date.toString('h')){
+                    if (this.lastDate === date.toString('h')) {
                         this.loading = false;
                         return this.errorMsg('תאריך לא יכול להיות זהה');
                     }
-                    this.successMsg('תאריך עודכן בהצלחה')
+                    this.successMsg('תאריך עודכן בהצלחה');
                     await script.calculateOnPatch(date, this.lastOna, location, key);
+                    await functions.schedulePushNotifications();
                     return this.loading = false;
                 }
                 this.loading = false;
             },
-            dateVerification(){
+            dateVerification() {
                 const lastDate = new Hebcal.HDate(this.lastDay, this.lastMonth, this.lastYear);
                 const beforeLastDate = new Hebcal.HDate(this.beforeDay, this.beforeMonth, this.beforeYear);
-                if (beforeLastDate.abs() > lastDate.abs()) return false;
-                return true;
+                return beforeLastDate.abs() <= lastDate.abs();
             },
             errorMsg(message) {
                 this.$toasted.global.err({
@@ -180,34 +182,34 @@
                     this.name = window.user.displayName;
                     this.todayHebMonth = new Hebcal.HDate().getMonthName();
                     self.$emit('hasData');
-                    if (response){
-                    if (response.lastOna) {
-                        response.lastOna === 'day'
-                            ? this.lastOna = 'day' :
-                            this.lastOna = 'night';
-                    }
-                    if (response.lastPeriods) {
-                        if (response.lastPeriods.length >= 1) {
-                            const lastDate = new Hebcal.HDate(response.lastPeriods[response.lastPeriods.length - 1]);
-                            this.lastDay = JSON.stringify(lastDate.day);
-                            this.lastMonth = Hebcal.HDate(lastDate).getMonthName();
-                            this.lastYear = JSON.stringify(lastDate.year);
-                            this.lastDate = lastDate.toString('h');
-                            this.lastDateDay = lastDate.getDate();
-                            this.enLastDate = script.enConvert(lastDate);
-                            this.lastLamedExists = new Hebcal.Month(this.lastMonth, JSON.parse(this.lastYear)).length !== 29;
+                    if (response) {
+                        if (response.lastOna) {
+                            response.lastOna === 'day'
+                                ? this.lastOna = 'day' :
+                                this.lastOna = 'night';
                         }
-                        if (response.lastPeriods.length > 1) {
-                            const beforeLastDate = new Hebcal.HDate(response.lastPeriods[response.lastPeriods.length - 2]);
-                            this.beforeDay = JSON.stringify(beforeLastDate.day);
-                            this.beforeMonth = Hebcal.HDate(beforeLastDate).getMonthName();
-                            this.beforeYear = JSON.stringify(beforeLastDate.year);
-                            this.enBeforeLastDate = script.enConvert(beforeLastDate);
-                            this.beforeLastDateDay = beforeLastDate.getDate();
-                            this.beforeLastLamedExists = new Hebcal.Month(this.beforeMonth, JSON.parse(this.beforeYear)).length !== 29;
+                        if (response.lastPeriods) {
+                            if (response.lastPeriods.length >= 1) {
+                                const lastDate = new Hebcal.HDate(response.lastPeriods[response.lastPeriods.length - 1]);
+                                this.lastDay = JSON.stringify(lastDate.day);
+                                this.lastMonth = Hebcal.HDate(lastDate).getMonthName();
+                                this.lastYear = JSON.stringify(lastDate.year);
+                                this.lastDate = lastDate.toString('h');
+                                this.lastDateDay = lastDate.getDate();
+                                this.enLastDate = script.enConvert(lastDate);
+                                this.lastLamedExists = new Hebcal.Month(this.lastMonth, JSON.parse(this.lastYear)).length !== 29;
+                            }
+                            if (response.lastPeriods.length > 1) {
+                                const beforeLastDate = new Hebcal.HDate(response.lastPeriods[response.lastPeriods.length - 2]);
+                                this.beforeDay = JSON.stringify(beforeLastDate.day);
+                                this.beforeMonth = Hebcal.HDate(beforeLastDate).getMonthName();
+                                this.beforeYear = JSON.stringify(beforeLastDate.year);
+                                this.enBeforeLastDate = script.enConvert(beforeLastDate);
+                                this.beforeLastDateDay = beforeLastDate.getDate();
+                                this.beforeLastLamedExists = new Hebcal.Month(this.beforeMonth, JSON.parse(this.beforeYear)).length !== 29;
+                            }
                         }
                     }
-                }
                 });
         },
     };
