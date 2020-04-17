@@ -7,6 +7,12 @@
         ".read": "auth.uid == $uid",
         ".write": "auth.uid == $uid"
       }
+    },
+    "notifications": {
+      "$uid": {
+        ".read": "auth.uid == $uid",
+        ".write": "auth.uid == $uid"
+      }
     }
   }
 }

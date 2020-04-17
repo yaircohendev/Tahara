@@ -61,13 +61,11 @@ public class MainActivity extends AppCompatActivity {
 
     class CalculateObject{
         @JavascriptInterface
-        public void calculateSum(boolean isSubscribed, String uid){
+        public void calculateSum(String uid){
             OneSignal.setExternalUserId(uid);
             OneSignal.logoutEmail();
         }
     }
-
-
 
     @Override
     public void onBackPressed() {

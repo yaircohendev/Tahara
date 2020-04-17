@@ -10,7 +10,7 @@
                 <md-icon class="md-icon-right">date_range</md-icon>
                 <span class="md-list-item-text">תאריכים</span>
             </md-list-item>
-            <md-list-item to="/Reminders" v-if="user" :disabled="true">
+            <md-list-item to="/Reminders" v-if="user" >
                 <md-icon class="md-icon-right">alarm</md-icon>
                 <span class="md-list-item-text">תזכורות</span>
             </md-list-item>

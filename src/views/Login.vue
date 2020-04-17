@@ -17,7 +17,7 @@
             </md-card-content>
             <md-card-actions>
                 <md-button to="/sign-up">הרשמה עם אימייל</md-button>
-                <md-button to="/forgot">שחכתי סיסמה</md-button>
+                <md-button to="/forgot">שכחתי סיסמה</md-button>
             </md-card-actions>
         </md-card>
         <loader v-if="loader"></loader>
