@@ -9,7 +9,7 @@ The Tahara app was built in order to help women around the world manage their ta
 * More options - different methods for calculations, veset kavoa options, and more halachic options.
 * Reminders - We will have prisha dates reminders, hefsek tahara reminders, 7 clean days reminders and more.
 * Biotz - We will have an automatic biotz day calculator 
-* Got any suggestions? Feel free to contribute or contact me and we'll try to implement them.
+* Got any suggestions? Feel free to contribute or contact me and we'll try to implement them. If Firebase crediantials are needed contact me for the environment variables access.
 
 ## Project setup
 ```
